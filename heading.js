@@ -38,10 +38,10 @@ colourWheel.addEventListener('click',e => {
 
 /* Should split this in to mulptiple functions too much happening in here */
 function circle(cursorX,cursorY) {
-    let colourWheelX = colourWheel.offsetTop + colourWheel.parentElement.offsetTop;  //get variables related to circle
-    let colourWheelY = colourWheel.offsetLeft + colourWheel.parentElement.offsetLeft;
+    let colourWheelY = colourWheel.offsetTop + colourWheel.parentElement.offsetTop;  //get variables related to circle
+    let colourWheelX = colourWheel.offsetLeft + colourWheel.parentElement.offsetLeft;
     let colourWheelHeight = colourWheel.offsetHeight;
-    // let colourWheelWidth = colourWheel.offsetWidth;
+    // console.log(colourWheelX,colourWheelY)
     let colourWheelRadius = colourWheelHeight/2;
     let adjustedY = cursorY*-1; //change y coordinate to be negative axis
     let adjustedX = cursorX;    //could just use cursorX?
@@ -68,15 +68,10 @@ function circle(cursorX,cursorY) {
     if (cursorX >= midpointX) circX = (-coefB + Math.sqrt(discriminant)) / (2 * coefA); //if mouseclick was right of circle midpoint use result 1 of quadratic
     else circX = (-coefB - Math.sqrt(discriminant)) / (2 * coefA);                      //otherwise use result 2
     circY = circX*gradient + yIntersect;  // find y coord at circum using x at circum
-    
-    /* FOR TESTING REMOVE BEFORE FINAL PUSH */
-    // circumPosition.style.top = circY*-1 - 2.5 + "px";
-    // circumPosition.style.left = circX - 2.5 + "px";
-    /* FOR TESTING REMOVE BEFORE FINAL PUSH */
 
     /* find angle difference between calculated circumference point */
     let circStartX,circStartY = 0;
-    let angleAdjust = 13;
+    let angleAdjust = 5;
     /* check which quadrant mouseclick was in and set appropriate angle */
     if (adjustedX >= midpointX && adjustedY >= midpointY) {
         circStartX = midpointX;
@@ -106,9 +101,8 @@ function circle(cursorX,cursorY) {
     colourChoice(hsl);
 }
 
-
 function colourChoice(hsl) {
     colourOutput.style.backgroundColor = String("hsl("+hsl[0]+","+hsl[1]+"%,"+hsl[2]+"%");
-    saturationBackground.style.background = "linear-gradient(hsl("+hsl[0]+",100%,"+hsl[2]+"%),hsl("+hsl[0]+",0%,"+hsl[2]+"%))";
-    hueBackground.style.background = "linear-gradient(hsl("+hsl[0]+","+hsl[1]+"%,100%),hsl("+hsl[0]+","+hsl[1]+"%,0%))";
+    saturationBackground.style.background = "linear-gradient(hsl("+hsl[0]+",100%,"+hsl[2]+"%),hsl("+hsl[0]+",30%,"+hsl[2]+"%))";
+    hueBackground.style.background = "linear-gradient(hsl("+hsl[0]+","+hsl[1]+"%,70%),hsl("+hsl[0]+","+hsl[1]+"%,30%))";
 }

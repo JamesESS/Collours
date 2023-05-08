@@ -3,18 +3,30 @@
     --h1blockcolour: white;
 }
 
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    cursor: default;
+  }
+
+.header {
+    font-size: 0.9vw;
+    color: var(--h1blockcolour);
+}
 .headingcontainer {
     display: flex;
     width: 100vw;
-    gap: 1rem;
+    gap: 1em;
     background-color: var(--h1blockcolour);
     position: relative;
-    top: 20vh;
+    top: 30vh;
+    left: 10vw;
+    font-size: 0.9vw;
 }
 
 .ccontainer {
-    height: 15rem;
-    width: 13rem;
+    height: 15em;
+    width: 13em;
     border-radius: 50%;
     background-color: var(--h1colour);
     display: flex;
@@ -22,40 +34,41 @@
     align-items: center;
 }
 .cblocker1 {
-    height: 9rem;
-    width: 9rem;
+    height: 9em;
+    width: 9em;
     border-radius: 50%;
     background-color: var(--h1blockcolour);
 }
 .cblocker2 {
     position: absolute;
-    left: 10rem;
-    height: 15rem;
-    width: 4rem;
+    left: 10em;
+    height: 15em;
+    width: 4em;
     background-color: var(--h1blockcolour);
 }
 .colourwheelcontainer {
     position: relative;
-    left: -3rem;
-    height: 15rem;
-    width: 15rem;
+    left: -3em;
+    height: 15em;
+    width: 15em;
     border-radius: 50%;
     background-color: var(--h1colour);
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 .colourwheelblocker {
-    height: 9.5rem;
-    width: 9.5rem;
+    height: 9.5em;
+    width: 9.5em;
     border-radius: 50%;
     background-color: var(--h1blockcolour);
 }
 .saturationcontainer {
     position: relative;
-    left: -3rem;
-    height: 15rem;
-    width: 5rem;
+    left: -3em;
+    height: 15em;
+    width: 5em;
     background-color: var(--h1colour);
     background-image: linear-gradient(red, var(--h1blockcolour));
     border-color: var(--h1colour);
@@ -63,19 +76,20 @@
 
 .huecontainer {
     position: relative;
-    left: -2.5rem;
-    height: 15rem;
-    width: 5rem;
+    left: -2.5em;
+    height: 15em;
+    width: 5em;
     background-color: var(--h1colour);
     background-image: linear-gradient(red, var(--h1blockcolour));
     border-color: var(--h1colour);
+    
 }
 
 .ocontainer {
     position: relative;
-    left: -2.5rem;
-    height: 15rem;
-    width: 15rem;
+    left: -2.5em;
+    height: 15em;
+    width: 15em;
     border-radius: 50%;
     background-color: var(--h1colour);
     display: flex;
@@ -83,17 +97,17 @@
     align-items: center;
 }
 .oblocker {
-    height: 9.5rem;
-    width: 9.5rem;
+    height: 9.5em;
+    width: 9.5em;
     border-radius: 50%;
     background-color: var(--h1blockcolour);
 }
 
 .ucontainer {
     position: relative;
-    left: -3rem;
-    height: 15rem;
-    width: 15rem;
+    left: -3em;
+    height: 15em;
+    width: 15em;
     border-radius: 40%;
     background-color: var(--h1colour);
     display: flex;
@@ -101,33 +115,32 @@
     align-items: center;
 }
 .ublocker1 {
-    height: 9rem;
-    width: 9rem;
+    height: 9em;
+    width: 9em;
     border-radius: 40%;
     background-color: var(--h1blockcolour);
 }
 .ublocker2 {
     position: absolute;
-    height: 9rem;
-    width: 9rem;
-    top: 0rem;
+    height: 9em;
+    width: 9em;
+    top: 0em;
     background-color: var(--h1blockcolour);
 }
 
 .rcontainer {
     position: relative;
-    left: -2.5rem;
-    height: 15rem;
-    width: 4rem;
+    left: -2.5em;
+    height: 15em;
+    width: 4em;
     background-color: var(--h1colour);
 }
-
 .rcurve {
     position: relative;
-    left: 1rem;
-    top: 0.5rem;
-    height: 10rem;
-    width: 10rem;
+    left: 1em;
+    top: 0.5em;
+    height: 10em;
+    width: 10em;
     border-radius: 50%;
     background-color: var(--h1colour);
     display: flex;
@@ -135,53 +148,55 @@
     align-items: center;
 }
 .rblocker1 {
-    height: 5.5rem;
-    width: 5.5rem;
+    height: 5.5em;
+    width: 5.5em;
     border-radius: 50%;
     background-color: var(--h1blockcolour);
 }
 .rblocker2 {
     position: absolute;
-    top: 2.5rem;
-    left: 3rem;
-    height: 9rem;
-    width: 7.5rem;
+    top: 2.5em;
+    left: 3em;
+    height: 9em;
+    width: 7.5em;
     border-radius: 20%;
     background-color: var(--h1blockcolour);
 }
 .rblocker3 {
     position: absolute;
-    left: 2rem;
+    left: 2em;
     height: 5em;
-    width: 1rem;
+    width: 1em;
     background-color: var(--h1colour);
 }
 
 .sliderwrapper {
     transform: rotate(90deg);
     position: relative;
-    top: -0.25rem;
+    top: -0.25em;
 }
 .slider {
     -webkit-appearance: none;
     appearance: none;
-    width: 15rem;
-    height: 5rem;
-    background: transparent;    
+    width: 15em;
+    height: 5em;
+    background: transparent; 
+    font-size: 0.9vw;   
+    cursor: pointer;
 }
-
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 0.5rem;
-    height: 4.9rem;
+    width: 0.5em;
+    height: 4.9em;
     background: rgba(0,0,0,0.6);
     cursor: pointer;
-  }
-  
+    font-size: 0.9vw;
+  } 
   .slider::-moz-range-thumb {
-    width: 0.5rem;
-    height: 4.9rem;
+    width: 0.5em;
+    height: 4.9em;
     background: rgba(0,0,0,0.6);
     cursor: pointer;
+    font-size: 0.9vw;
   }
