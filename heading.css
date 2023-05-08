@@ -200,3 +200,37 @@
     cursor: pointer;
     font-size: 0.9vw;
   }
+
+.instructions {
+    position: relative;
+    top: 30vh;
+    text-align: center;
+    font-size: 1.5em;
+  }
+
+
+.buttons {
+    position: relative;
+    top: 50vh;
+    left: 10vw;
+    width: 40%;
+}
+
+.container {
+    display: flex;
+}
+.schemeselect {
+    height: 8vh;
+    width: 100vw;
+}
+.hsl {
+    height: 90vh;
+    width: 100vw;
+    justify-content: center;
+    text-align: center;
+    line-height: 100vh;
+}
+
+.hidden {
+    display: none;
+}
