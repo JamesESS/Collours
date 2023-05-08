@@ -1,0 +1,65 @@
+
+:root {
+    --diameter: 200px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    cursor: default;
+  }
+
+.container {
+    display: flex;
+}
+
+.check {
+    background-color: rgba(100, 0, 100, 100);
+    width: 50vw;
+    height: 100vh;
+    z-index: 0;
+    
+}
+
+.output {
+    background-color: black;
+    color: white;
+    width: 50vw;
+    height: 100vh;
+    z-index: 0;
+}
+
+.colour {
+    background: conic-gradient(
+    hsl(360, 100%, 50%),
+    );
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: var(--diameter);
+    width: var(--diameter);
+    border-radius: 50%;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.wheelcontainer {
+    position: absolute;
+    top: 20vh;
+    left: 20vw;
+}
+.wheelblocker {
+    height: calc(var(--diameter)/1.5);
+    width: calc(var(--diameter)/1.5);
+    border-radius: 50%;
+    z-index: inherit;
+    background-color: azure;
+}
+
+.letterc {
+    height: var(--diameter);
+    width: var(--diameter);
+    border-radius: 50%;
+    background-color: azure;
+}

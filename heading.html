@@ -1,0 +1,49 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="heading.css" rel="stylesheet">
+    <script src="heading.js" defer></script>
+    <title>Document</title>
+</head>
+<body>
+    <h1>
+        <div class="headingcontainer">
+            <div class="ccontainer">
+                <div class="cblocker1"></div>
+                <div class="cblocker2"></div>
+            </div>
+            <div class="colourwheelcontainer" id="colourwheel">
+                <div class="thumb" id="colourposition"></div>
+                <div class="colourwheelblocker" onclick="event.stopPropagation();">
+                </div>
+            </div>
+            <div class="saturationcontainer" id="saturationbackground">
+                <div class="sliderwrapper">
+                    <input type="range" min="0" max="100" class="slider" id="saturationslider" value="0">
+                </div>
+            </div>
+            <div class="huecontainer" id="huebackground">
+                <div class="sliderwrapper">
+                    <input type="range" min="0" max="100" class="slider" id="hueslider" value="50">
+                </div>
+            </div>
+            <div class="ocontainer">
+                <div class="oblocker" id="colouroutput">
+                </div>
+            </div>
+            <div class="ucontainer">
+                <div class="ublocker1"></div>
+                <div class="ublocker2"></div>
+            </div>
+            <div class="rcontainer">
+                <div class="rcurve">
+                    <div class="rblocker1"></div>
+                    <div class="rblocker2"></div>
+                    <div class="rblocker3"></div>
+                </div>
+            </div>
+        </div>
+    </h1>
+</body>
