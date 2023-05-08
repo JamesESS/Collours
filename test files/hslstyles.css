@@ -1,0 +1,23 @@
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    cursor: default;
+  }
+.container {
+    display: flex;
+}
+.schemeselect {
+    height: 8vh;
+    width: 100vw;
+}
+.hsl {
+    height: 90vh;
+    width: 100vw;
+    background-color: hsl(200, 56%, 50%);
+    justify-content: center;
+    text-align: center;
+    line-height: 100vh;
+}
+#hsl2 {
+    background-color: yellow;
+}
