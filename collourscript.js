@@ -116,16 +116,18 @@ function colourChoice(hsl) {
     saturationBackground.style.background = "linear-gradient(hsl("+hsl[0]+",100%,"+hsl[2]+"%),hsl("+hsl[0]+",30%,"+hsl[2]+"%))";
     hueBackground.style.background = "linear-gradient(hsl("+hsl[0]+","+hsl[1]+"%,70%),hsl("+hsl[0]+","+hsl[1]+"%,30%))";
 }
-
+let selector = 1;
 useSelectedColour.addEventListener("click", e => {
     e.target.parentElement.classList.toggle("hidden");
-    let selector = 0;
+    selector = 0;
     firstScheme(selector);
+    selector = 1;
 })
 useRandomColour.addEventListener("click", e => {
     e.target.parentElement.classList.toggle("hidden");
-    let selector = 1;
+    selector = 1;
     firstScheme(selector);
+    console.log("backhere")
 })
 
 monochromaticButton.addEventListener("click",monochromatic);
@@ -203,8 +205,8 @@ function convertToHex(rgb) {
     return hex;
 }
 
-function monochromatic(selector) {
-    if (selector == 1) randomColor();
+function monochromatic() {
+    if (selector === 1) randomColor();
     hsl2 = hsl.slice();
     hsl3 = hsl.slice();
     hsl4 = hsl.slice();
@@ -214,7 +216,7 @@ function monochromatic(selector) {
     output();
 }
 
-function analogous(selector) {
+function analogous() {
     if (selector == 1) randomColor();
     hsl2 = hsl.slice();
     hsl3 = hsl.slice();
@@ -237,7 +239,7 @@ function analogous(selector) {
 
 // analogous();
 
-function quadScheme(selector) {
+function quadScheme() {
     if (selector == 1) randomColor();
     hsl2 = hsl.slice();
     hsl3 = hsl.slice();
@@ -258,7 +260,7 @@ function quadScheme(selector) {
     output();
 }
 
-function splitComplementary(selector) {
+function splitComplementary() {
     if (selector == 1) randomColor();
     hsl2 = hsl.slice();
     hsl3 = hsl2.slice();
@@ -289,8 +291,10 @@ function output() {
     containers[2].innerText = "RGB: "+convertToRGB(hsl3);
     containers[3].innerText = "RGB: "+convertToRGB(hsl4);
 }
+
 function randomColor() {
     hsl[0] = Math.round(Math.random()*360);
     // hsl[1] = (Math.random()+0.2)*70;
     hsl[2] = Math.round((Math.random()+0.2)*70);
+    console.log("random");
 }
