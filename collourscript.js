@@ -15,9 +15,29 @@ const analogousButton = document.getElementById("analogous");
 const quadSchemeButton = document.getElementById("square");
 const splitComplementaryButton = document.getElementById("splitcomp");
 
-let hsl = [0,100,50];
-colourWheelConicGradient(hsl[1],hsl[2]); 
-colourChoice(hsl);
+
+class colourconstruct {
+    constructor(hsl,locked) {
+        this.hsl = hsl;
+        // this.rgb = convertToRGB(this.hsl);
+        // this.hex = convertToHex(this.rgb);
+        this.locked = locked;
+    }
+    get rgbGet() {
+        return convertToRGB(this.hsl);
+    }
+    get hexGet() {
+        return convertToHex(this.rgb);
+    }
+}
+
+const colours = [];
+for (i = 0; i < 4; i++){
+    colours.push(new colourconstruct([0,100,50],false))
+}
+// let hsl = [0,100,50];
+colourWheelConicGradient(colours[0].hsl[1],colours[0].hsl[2]); 
+colourChoice(colours[0].hsl);
 
 /* Creates colour wheel where each degree is new hsl colour */
 function colourWheelConicGradient(sat,light) {
@@ -31,13 +51,13 @@ function colourWheelConicGradient(sat,light) {
 /* change saturation and lightness of selected colour */
 saturation.addEventListener('input', e => {
     console.log(saturation.value);
-    hsl[1] = 100 - saturation.value;
-    colourChoice(hsl);
+    colours[0].hsl[1] = 100 - saturation.value;
+    colourChoice(colours[0].hsl);
 })
 hue.addEventListener('input', e => { //should be lightness not hue!! go through and correct in all relevant places
     console.log(hue.value);
-    hsl[2] = 100 - hue.value;
-    colourChoice(hsl);
+    colours[0].hsl[2] = 100 - hue.value;
+    colourChoice(colours[0].hsl);
 })
 
 /* finds coordinates of mouseclick and passes them on to the circle function*/
@@ -106,8 +126,9 @@ function circle(cursorX,cursorY) { //Should split this in to mulptiple functions
     /* Find angle between point clicked on and  relevant quadrant store angle as hue in hsl array*/
     let hypotenus = (circX - midpointX)**2 + (circY - midpointY)**2;
     let opposite = (circStartX - circX)**2 + (circStartY - circY)**2;
-    hsl[0] = Math.round(Math.asin(opposite/hypotenus) * (180/Math.PI)) + angleAdjust; //having to add to result to get correct colour? something wrong somehwere!
-    colourChoice(hsl);
+    colours[0].hsl[0] = Math.round(Math.asin(opposite/hypotenus) * (180/Math.PI)) + angleAdjust; //having to add to result to get correct colour? something wrong somehwere!
+    console.log(colours[0].hsl);
+    colourChoice(colours[0].hsl);
 }
 
 /* outputs the hsl combination selected */
@@ -116,6 +137,7 @@ function colourChoice(hsl) {
     saturationBackground.style.background = "linear-gradient(hsl("+hsl[0]+",100%,"+hsl[2]+"%),hsl("+hsl[0]+",30%,"+hsl[2]+"%))";
     hueBackground.style.background = "linear-gradient(hsl("+hsl[0]+","+hsl[1]+"%,70%),hsl("+hsl[0]+","+hsl[1]+"%,30%))";
 }
+
 let selector = 1;
 useSelectedColour.addEventListener("click", e => {
     e.target.parentElement.classList.toggle("hidden");
@@ -137,8 +159,9 @@ splitComplementaryButton.addEventListener("click",splitComplementary);
 
 function firstScheme(selector) {
     containers[0].parentElement.parentElement.classList.toggle("hidden");
-    let schemeChoice = Math.floor(Math.random()*4);
-    console.log(schemeChoice);
+    // let schemeChoice = Math.floor(Math.random()*4);
+    let schemeChoice = 1;
+    // console.log(schemeChoice);
     if (schemeChoice == 1) monochromatic(selector);
     else if (schemeChoice == 2) analogous(selector);
     else if (schemeChoice == 3) quadScheme(selector);
@@ -206,95 +229,109 @@ function convertToHex(rgb) {
 }
 
 function monochromatic() {
+    // colours.forEach(colour => console.log(colour.hsl));
     if (selector === 1) randomColor();
-    hsl2 = hsl.slice();
-    hsl3 = hsl.slice();
-    hsl4 = hsl.slice();
-    hsl2[2] += 8;
-    hsl3[2] += 16;
-    hsl4[2] += 24;
+    // colours.forEach(colour => console.log("before slice "+colour.hsl));
+    colours[1].hsl = [...colours[0].hsl];
+    colours[2].hsl = [...colours[1].hsl];
+    colours[3].hsl = [...colours[2].hsl];
+    // colours.forEach(colour => console.log("after slice "+colour.hsl));
+    colours[1].hsl[2] += 8;
+    colours[2].hsl[2] += 16;
+    colours[3].hsl[2] += 24;
+    // colours.forEach(colour => console.log("after maths "+colour.hsl));
     output();
 }
 
 function analogous() {
     if (selector == 1) randomColor();
-    hsl2 = hsl.slice();
-    hsl3 = hsl.slice();
-    hsl4 = hsl.slice();
-    hsl2[0] += 25;
-    hsl3[0] += 50;
-    hsl4[0] += 75;
-    if (hsl2[0] > 360) {
-        hsl2[0] -= 360;
-        hsl3[0] -= 360;
-        hsl4[0] -= 360;
+    colours[1].hsl = colours[0].hsl.slice();
+    colours[2].hsl = colours[1].hsl.slice();
+    colours[3].hsl = colours[2].hsl.slice();
+    colours[1].hsl[0] += 25;
+    colours[2].hsl[0] += 50;
+    colours[3].hsl[0] += 75;
+    if (colours[1].hsl[0] > 360) {
+        colours[1].hsl[0] -= 360;
+        colours[2].hsl[0] -= 360;
+        colours[3].hsl[0] -= 360;
     }
-    else if (hsl3[0] > 360) {
-        hsl3[0] -= 360;
-        hsl4[0] -= 360;
+    else if (colours[2].hsl[0] > 360) {
+        colours[2].hsl[0] -= 360;
+        colours[3].hsl[0] -= 360;
     }
-    else if (hsl4[0] > 360) hsl4[0] -= 360;
+    else if (colours[3].hsl[0] > 360) colours[3].hsl[0] -= 360;
     output();
 }
 
-// analogous();
 
 function quadScheme() {
     if (selector == 1) randomColor();
-    hsl2 = hsl.slice();
-    hsl3 = hsl.slice();
-    hsl4 = hsl.slice();
-    hsl2[0] += 90;
-    hsl3[0] += 180;
-    hsl4[0] += 270;
-    if (hsl2[0] > 360) {
-        hsl2[0] -= 360;
-        hsl3[0] -= 360;
-        hsl4[0] -= 360;
+    colours[1].hsl = colours[0].hsl.slice();
+    colours[2].hsl = colours[1].hsl.slice();
+    colours[3].hsl = colours[2].hsl.slice();
+    colours[1].hsl[0] += 90;
+    colours[2].hsl[0] += 180;
+    colours[3].hsl[0] += 270;
+    if (colours[1].hsl[0] > 360) {
+        colours[1].hsl[0] -= 360;
+        colours[2].hsl[0] -= 360;
+        colours[3].hsl[0] -= 360;
     }
-    else if (hsl3[0] > 360) {
-        hsl3[0] -= 360;
-        hsl4[0] -= 360;
+    else if (colours[2].hsl[0] > 360) {
+        colours[2].hsl[0] -= 360;
+        colours[3].hsl[0] -= 360;
     }
-    else if (hsl4[0] > 360) hsl4[0] -= 360;
+    else if (colours[3].hsl[0] > 360) colours[3].hsl[0] -= 360;
     output();
 }
 
 function splitComplementary() {
     if (selector == 1) randomColor();
-    hsl2 = hsl.slice();
-    hsl3 = hsl2.slice();
-    hsl2[0] += 180;
-    hsl3[0] += 30;
-    hsl4 = hsl3.slice();
-    hsl4[0] += 180;
-    if (hsl2[0] > 360 && hsl3[0]) {
-        hsl2[0] -= 360;
-        hsl3[0] -= 360;
-        hsl4[0] -= 360;
+    colours[1].hsl = colours[0].hsl.slice();
+    colours[2].hsl = colours[1].hsl.slice();
+    colours[1].hsl[0] += 180;
+    colours[2].hsl[0] += 30;
+    colours[3].hsl = colours[2].hsl.slice();
+    colours[3].hsl[0] += 180;
+    if (colours[1].hsl[0] > 360 && colours[2].hsl[0] > 360) {
+        colours[1].hsl[0] -= 360;
+        colours[2].hsl[0] -= 360;
+        colours[3].hsl[0] -= 360;
     }
-    else if (hsl2[0] > 360) {
-        hsl3[0] -= 360;
-        hsl4[0] -= 360;
+    else if (colours[1].hsl[0] > 360) {
+        colours[1].hsl[0] -= 360;
+        colours[3].hsl[0] -= 360;
     }
-    else if (hsl4[0] > 360) hsl4[0] -= 360;
+    else if (colours[2].hsl[0] > 360) {
+        colours[2].hsl[0] -= 360;
+        colours[3].hsl[0] -= 360;
+    }
+    else if (colours[3].hsl[0] > 360) colours[3].hsl[0] -= 360;
     output();
 }
 
 function output() {
-    containers[0].style.backgroundColor = /* "rgb("+convertToRGB(hsl)+")" */ "hsl("+hsl[0]+","+hsl[1]+"%,"+hsl[2]+"%)";
-    containers[1].style.backgroundColor = "rgb("+convertToRGB(hsl2)+")";
-    containers[2].style.backgroundColor = "rgb("+convertToRGB(hsl3)+")";
-    containers[3].style.backgroundColor = "rgb("+convertToRGB(hsl4)+")";
+    colours.forEach((colour, index) => {
+        console.log(colour.hsl);
+        containers[index].style.backgroundColor = "hsl("+colour.hsl[0]+", "+colour.hsl[1]+"%, "+colour.hsl[2]+"%)" ;
+        containers[index].children[0].innerText = "HSL: "+colour.hsl[0]+", "+colour.hsl[1]+"%, "+colour.hsl[2]+"%";
+        containers[index].children[1].innerText = "HSL: "+colour.hsl[0]+", "+colour.hsl[1]+"%, "+colour.hsl[2]+"%";
+    })
+    /* containers[0].style.backgroundColor = "rgb("+convertToRGB(hsl)+")";     //"hsl("+hsl[0]+","+hsl[1]+"%,"+hsl[2]+"%)";
+    containers[1].style.backgroundColor = "rgb("+convertToRGB(colours[1].hsl)+")";
+    containers[2].style.backgroundColor = "rgb("+convertToRGB(colours[2].hsl)+")";
+    containers[3].style.backgroundColor = "rgb("+convertToRGB(colours[3].hsl)+")";
     containers[0].innerText = "RGB: "+convertToRGB(hsl);
-    containers[1].innerText = "RGB: "+convertToRGB(hsl2);
-    containers[2].innerText = "RGB: "+convertToRGB(hsl3);
-    containers[3].innerText = "RGB: "+convertToRGB(hsl4);
+    containers[1].innerText = "RGB: "+convertToRGB(colours[1].hsl);
+    containers[2].innerText = "RGB: "+convertToRGB(colours[2].hsl);
+    containers[3].innerText = "RGB: "+convertToRGB(colours[3].hsl); */
 }
 
 function randomColor() {
-    hsl[0] = Math.round(Math.random()*360);
+    // console.log("random"+colours[0].hsl[0]);
+    colours[0].hsl[0] = Math.round(Math.random()*360);
     // hsl[1] = (Math.random()+0.2)*70;
-    hsl[2] = Math.round((Math.random()+0.2)*70);
-    console.log("random");
+    colours[0].hsl[2] = Math.round((Math.random()+0.2)*70);
+    // console.log("random"+colours[0].hsl[0]);
 }
