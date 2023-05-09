@@ -232,6 +232,7 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
+    position: relative;
     /* line-height: 100vh; */
 }
 .blacktext {
@@ -243,4 +244,9 @@
 
 .hidden {
     display: none;
+}
+
+.dropcontcontainer.show {
+ display: flex;
+ flex-direction: column;
 }
