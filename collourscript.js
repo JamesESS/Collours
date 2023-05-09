@@ -19,16 +19,17 @@ const splitComplementaryButton = document.getElementById("splitcomp");
 class colourconstruct {
     constructor(hsl,locked) {
         this.hsl = hsl;
-        // this.rgb = convertToRGB(this.hsl);
-        // this.hex = convertToHex(this.rgb);
+        this.rgb = convertToRGB(this.hsl);
+        this.hex = convertToHex(this.rgb);
         this.locked = locked;
+        this.luminance = findRelativeLum(this.rgb);
     }
-    get rgbGet() {
+    /* get rgbGet() {
         return convertToRGB(this.hsl);
     }
     get hexGet() {
         return convertToHex(this.rgb);
-    }
+    } */
 }
 
 const colours = [];
@@ -189,7 +190,6 @@ function convertToRGB (hslConv) {
     // console.log(rgb)
     return rgb;
 }
-
 /* convert rgb to hex */
 function convertToHex(rgb) {
     let hexLookup = {
@@ -225,7 +225,22 @@ function convertToHex(rgb) {
         hex.push(hexCalc.join(""));
         // console.log(hex)
     });
-    return hex;
+    return hex
+}
+/* find relative luminance from rgb */
+function findRelativeLum(rgb) {
+    let convertConstants = [0.2126,0.7152,0.0722]; //constants used in conversion taken from -https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
+    let decimalPlaces = 10**4;  //used to round to x decimal places where x is the the power
+    let sRGB = rgb.map(x => x/255);
+    sRGB.forEach((x, i) => {
+        if (x <= 0.03928) sRGB[i] = x/12.92;
+        else sRGB[i] = ((x+0.055)/1.055)**2.4;
+    });
+    let luminance = sRGB.reduce((sum, curr, index) => {
+        sum = (sum + curr*convertConstants[index])*(decimalPlaces);
+        return sum;
+    },0);
+    return (Math.round(luminance))/(decimalPlaces);
 }
 
 function monochromatic() {
