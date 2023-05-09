@@ -14,29 +14,43 @@ const monochromaticButton = document.getElementById("monochromatic");
 const analogousButton = document.getElementById("analogous");
 const quadSchemeButton = document.getElementById("square");
 const splitComplementaryButton = document.getElementById("splitcomp");
+const colourDropdownButton = document.getElementById("dropdowncolour");
+const dropContainer = document.getElementById("dropcontainer");
 
 
 class colourconstruct {
     constructor(hsl,locked) {
         this.hsl = hsl;
-        this.rgb = convertToRGB(this.hsl);
-        this.hex = convertToHex(this.rgb);
+        /* this.rgb = convertToRGB(this.hsl);
+        this.hex = convertToHex(this.rgb); */
         this.locked = locked;
-        this.luminance = findRelativeLum(this.rgb);
+        // this.luminance = findRelativeLum(this.rgb);
     }
-    /* get rgbGet() {
+    get rgb() {
         return convertToRGB(this.hsl);
     }
-    get hexGet() {
+    get hex() {
         return convertToHex(this.rgb);
-    } */
+    }
+    get luminance() {
+        return findRelativeLum(this.rgb)
+    }
+    get contrastWhite() {
+        return (Math.round((1 + 0.05)/(this.luminance + 0.05)*100))/100;
+    }
+    get contrastBlack() {
+        return (Math.round(((this.luminance + 0.05)/(0 + 0.05)*100))/100);
+    }
 }
 
+/* initialise all four colours */
 const colours = [];
 for (i = 0; i < 4; i++){
     colours.push(new colourconstruct([0,100,50],false))
 }
-// let hsl = [0,100,50];
+
+let outputType = 0;
+
 colourWheelConicGradient(colours[0].hsl[1],colours[0].hsl[2]); 
 colourChoice(colours[0].hsl);
 
@@ -143,13 +157,13 @@ let selector = 1;
 useSelectedColour.addEventListener("click", e => {
     e.target.parentElement.classList.toggle("hidden");
     selector = 0;
-    firstScheme(selector);
+    randomScheme(selector);
     selector = 1;
 })
 useRandomColour.addEventListener("click", e => {
     e.target.parentElement.classList.toggle("hidden");
     selector = 1;
-    firstScheme(selector);
+    randomScheme(selector);
     console.log("backhere")
 })
 
@@ -158,11 +172,11 @@ analogousButton.addEventListener("click",analogous);
 quadSchemeButton.addEventListener("click",quadScheme);
 splitComplementaryButton.addEventListener("click",splitComplementary);
 
-function firstScheme(selector) {
+/* selects a random scheme from the four available */
+function randomScheme(selector) {
     containers[0].parentElement.parentElement.classList.toggle("hidden");
-    // let schemeChoice = Math.floor(Math.random()*4);
-    let schemeChoice = 1;
-    // console.log(schemeChoice);
+    let schemeChoice = Math.floor(Math.random()*4);
+    // let schemeChoice = 1; //for testing
     if (schemeChoice == 1) monochromatic(selector);
     else if (schemeChoice == 2) analogous(selector);
     else if (schemeChoice == 3) quadScheme(selector);
@@ -238,31 +252,24 @@ function findRelativeLum(rgb) {
     });
     let luminance = sRGB.reduce((sum, curr, index) => {
         sum = (sum + curr*convertConstants[index])*(decimalPlaces);
-        return sum;
+        return (Math.round(sum))/(decimalPlaces);
     },0);
-    return (Math.round(luminance))/(decimalPlaces);
+    console.log(Math.round(luminance))/(decimalPlaces);
+    return luminance;
 }
 
-function monochromatic() {
-    // colours.forEach(colour => console.log(colour.hsl));
+/* Colour scheme generators */
+function monochromatic() { //only changes lightness when generating lightness in random or splashscreen it's capped so this function should never output lightness>100 for any colours
     if (selector === 1) randomColor();
-    // colours.forEach(colour => console.log("before slice "+colour.hsl));
-    colours[1].hsl = [...colours[0].hsl];
-    colours[2].hsl = [...colours[1].hsl];
-    colours[3].hsl = [...colours[2].hsl];
-    // colours.forEach(colour => console.log("after slice "+colour.hsl));
+    spliceColours();
     colours[1].hsl[2] += 8;
     colours[2].hsl[2] += 16;
     colours[3].hsl[2] += 24;
-    // colours.forEach(colour => console.log("after maths "+colour.hsl));
     output();
 }
-
 function analogous() {
     if (selector == 1) randomColor();
-    colours[1].hsl = colours[0].hsl.slice();
-    colours[2].hsl = colours[1].hsl.slice();
-    colours[3].hsl = colours[2].hsl.slice();
+    spliceColours();
     colours[1].hsl[0] += 25;
     colours[2].hsl[0] += 50;
     colours[3].hsl[0] += 75;
@@ -278,13 +285,9 @@ function analogous() {
     else if (colours[3].hsl[0] > 360) colours[3].hsl[0] -= 360;
     output();
 }
-
-
 function quadScheme() {
     if (selector == 1) randomColor();
-    colours[1].hsl = colours[0].hsl.slice();
-    colours[2].hsl = colours[1].hsl.slice();
-    colours[3].hsl = colours[2].hsl.slice();
+    spliceColours();
     colours[1].hsl[0] += 90;
     colours[2].hsl[0] += 180;
     colours[3].hsl[0] += 270;
@@ -300,15 +303,12 @@ function quadScheme() {
     else if (colours[3].hsl[0] > 360) colours[3].hsl[0] -= 360;
     output();
 }
-
 function splitComplementary() {
     if (selector == 1) randomColor();
-    colours[1].hsl = colours[0].hsl.slice();
-    colours[2].hsl = colours[1].hsl.slice();
+    spliceColours();
     colours[1].hsl[0] += 180;
     colours[2].hsl[0] += 30;
-    colours[3].hsl = colours[2].hsl.slice();
-    colours[3].hsl[0] += 180;
+    colours[3].hsl[0] += 210;
     if (colours[1].hsl[0] > 360 && colours[2].hsl[0] > 360) {
         colours[1].hsl[0] -= 360;
         colours[2].hsl[0] -= 360;
@@ -326,27 +326,81 @@ function splitComplementary() {
     output();
 }
 
+/* sets background colour based on colours and outputs the colour code in hsl to innertext */
 function output() {
     colours.forEach((colour, index) => {
         console.log(colour.hsl);
         containers[index].style.backgroundColor = "hsl("+colour.hsl[0]+", "+colour.hsl[1]+"%, "+colour.hsl[2]+"%)" ;
-        containers[index].children[0].innerText = "HSL: "+colour.hsl[0]+", "+colour.hsl[1]+"%, "+colour.hsl[2]+"%";
-        containers[index].children[1].innerText = "HSL: "+colour.hsl[0]+", "+colour.hsl[1]+"%, "+colour.hsl[2]+"%";
+        if (outputType == 1) {
+            containers[index].children[0].innerText = "RGB: "+colour.rgb;
+            containers[index].children[1].innerText = "RGB: "+colour.rgb;
+        }
+        else if (outputType == 2) {
+            containers[index].children[0].innerText = "HEX: #"+colour.hex.join('');
+            containers[index].children[1].innerText = "HEX: #"+colour.hex.join('');
+        }
+        else if (outputType == 3) {
+            containers[index].children[0].innerText = "Contrast on black: "+colour.contrastBlack;
+            containers[index].children[1].innerText = "Contrast on white: "+colour.contrastWhite;
+        }
+        else {
+            containers[index].children[0].innerText = "HSL: "+colour.hsl[0]+", "+colour.hsl[1]+"%, "+colour.hsl[2]+"%";
+            containers[index].children[1].innerText = "HSL: "+colour.hsl[0]+", "+colour.hsl[1]+"%, "+colour.hsl[2]+"%";
+        }
     })
-    /* containers[0].style.backgroundColor = "rgb("+convertToRGB(hsl)+")";     //"hsl("+hsl[0]+","+hsl[1]+"%,"+hsl[2]+"%)";
-    containers[1].style.backgroundColor = "rgb("+convertToRGB(colours[1].hsl)+")";
-    containers[2].style.backgroundColor = "rgb("+convertToRGB(colours[2].hsl)+")";
-    containers[3].style.backgroundColor = "rgb("+convertToRGB(colours[3].hsl)+")";
-    containers[0].innerText = "RGB: "+convertToRGB(hsl);
-    containers[1].innerText = "RGB: "+convertToRGB(colours[1].hsl);
-    containers[2].innerText = "RGB: "+convertToRGB(colours[2].hsl);
-    containers[3].innerText = "RGB: "+convertToRGB(colours[3].hsl); */
 }
 
+/* generates random hue saturation and lightness then saves to colours[0].hsl */
 function randomColor() {
     // console.log("random"+colours[0].hsl[0]);
     colours[0].hsl[0] = Math.round(Math.random()*360);
-    // hsl[1] = (Math.random()+0.2)*70;
-    colours[0].hsl[2] = Math.round((Math.random()+0.2)*70);
+    colours[0].hsl[1] = Math.round((Math.random()+0.3)*70);
+    colours[0].hsl[2] = Math.round((Math.random()+0.3)*70);
     // console.log("random"+colours[0].hsl[0]);
 }
+
+/* make deep copies of hsl value */
+function spliceColours() {
+    colours[1].hsl = colours[0].hsl.slice();
+    colours[2].hsl = colours[0].hsl.slice();
+    colours[3].hsl = colours[0].hsl.slice();
+}
+
+
+colourDropdownButton.addEventListener('click',colourDropdown);
+
+function colourDropdown() {
+    dropContainer.classList.toggle("show");
+    dropContainer.classList.toggle("hidden");
+    colourDropdownButton.classList.toggle("hidden");
+}
+
+const hslButton = document.getElementById("hslbutton");
+const rgbButton = document.getElementById("rgbbutton");
+const hexButton = document.getElementById("hexbutton");
+const contrastButton = document.getElementById("contrastbutton");
+
+hslButton.addEventListener('click',e => {
+    outputType = 0;
+    colourDropdownButton.innerText = "HSL";
+    output();
+    colourDropdown();
+});
+rgbButton.addEventListener('click',e => {
+    outputType = 1;
+    colourDropdownButton.innerText = "RGB";
+    output();
+    colourDropdown();
+});
+hexButton.addEventListener('click',e => {
+    outputType = 2;
+    colourDropdownButton.innerText = "HEX";
+    output();
+    colourDropdown();
+});
+contrastButton.addEventListener('click',e => {
+    outputType = 3;
+    colourDropdownButton.innerText = "Contrast";
+    output();
+    colourDropdown();
+});
