@@ -228,7 +228,17 @@
     width: 100vw;
     justify-content: center;
     text-align: center;
-    line-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    /* line-height: 100vh; */
+}
+.blacktext {
+    color: black;
+}
+.whitetext {
+    color: white;
 }
 
 .hidden {
