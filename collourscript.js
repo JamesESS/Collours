@@ -385,10 +385,12 @@ function colourDropdown() {
 [...lockColours].forEach((e,i) => {
    e.addEventListener("click", e => {
         colours[i].locked = !colours[i].locked;  //toggles between true and false
+        if (colours[i].locked) e.target.innerText = "unlock";
+        else e.target.innerText = "lock";
     })
 });
 
-
+/* gives random colour scheme when space bar is pressed (event triggers on keyup sso actually when spacebar is released) */
 document.body.onkeyup = function(e) {
     if (e.key == " " ||
         e.code == "Space" ||      
@@ -402,8 +404,3 @@ document.body.onkeyup = function(e) {
         }
     }
   }
-
-// setInterval(console.log(colours[0].locked),800);
-setInterval(() => {
-    console.log(colours[0].locked);
-}, 800);
