@@ -1,30 +1,29 @@
 /* all const for landing page */
-const colourWheel = document.getElementById("colourwheel");
-const mousePosition = document.getElementById("mouseposition");
-const colourOutput = document.getElementById("colouroutput");
-const saturation = document.getElementById("saturationslider");
-const saturationBackground = document.getElementById("saturationbackground");
-const hue = document.getElementById("hueslider");
-const hueBackground = document.getElementById("huebackground");
-const useRandomColour = document.getElementById("randomcolour");
-const useSelectedColour = document.getElementById("selectedcolour");
+const colourWheel = document.getElementById("colourwheel");  //colour wheel
+const colourOutput = document.getElementById("colouroutput"); //outputs result colour from colour wheel and sliders
+const saturation = document.getElementById("saturationslider"); //slider for saturation
+const saturationBackground = document.getElementById("saturationbackground"); //controls background gradient for saturation slider
+const hue = document.getElementById("hueslider");   //slider to control lightness (need to go through all files and correct hue to light)
+const hueBackground = document.getElementById("huebackground"); //controls background gradient for lightness slider  (need to go through all files and correct hue to light)
+const useRandomColour = document.getElementById("randomcolour"); //use random colour button
+const useSelectedColour = document.getElementById("selectedcolour"); //use selected colour button
 /* all const for actual colourscheme page */
-const containers = document.getElementsByClassName("hsl");
-const monochromaticButton = document.getElementById("monochromatic");
-const analogousButton = document.getElementById("analogous");
-const quadSchemeButton = document.getElementById("square");
-const splitComplementaryButton = document.getElementById("splitcomp");
-const colourDropdownButton = document.getElementById("dropdowncolour");
-const dropContainer = document.getElementById("dropcontainer");
+const containers = document.getElementsByClassName("hsl"); //colour outputs
+const monochromaticButton = document.getElementById("monochromatic"); //monochromatic button
+const analogousButton = document.getElementById("analogous"); //analgous button
+const quadSchemeButton = document.getElementById("square"); //square button
+const splitComplementaryButton = document.getElementById("splitcomp");  //split complementary button
+
+const lockColours = document.getElementsByClassName("lock"); //colour lock buttons
+const dropContainer = document.getElementById("dropcontainer"); //drop down container
+const colourDropdownButton = document.getElementById("dropdowncolour"); //drop down menu
+const dropContent = document.getElementsByClassName("dropdowncitem"); //drop down buttons
 
 
 class colourconstruct {
     constructor(hsl,locked) {
         this.hsl = hsl;
-        /* this.rgb = convertToRGB(this.hsl);
-        this.hex = convertToHex(this.rgb); */
         this.locked = locked;
-        // this.luminance = findRelativeLum(this.rgb);
     }
     get rgb() {
         return convertToRGB(this.hsl);
@@ -49,10 +48,10 @@ for (i = 0; i < 4; i++){
     colours.push(new colourconstruct([0,100,50],false))
 }
 
-let outputType = 0;
+let outputType = 0; //controls how colour codes are displayed
 
-colourWheelConicGradient(colours[0].hsl[1],colours[0].hsl[2]); 
-colourChoice(colours[0].hsl);
+colourWheelConicGradient(colours[0].hsl[1],colours[0].hsl[2]);  //creates background gradient for colour wheel
+colourChoice(colours[0].hsl);   //output initial colour choice
 
 /* Creates colour wheel where each degree is new hsl colour */
 function colourWheelConicGradient(sat,light) {
@@ -65,12 +64,12 @@ function colourWheelConicGradient(sat,light) {
 
 /* change saturation and lightness of selected colour */
 saturation.addEventListener('input', e => {
-    console.log(saturation.value);
+    // console.log(saturation.value);
     colours[0].hsl[1] = 100 - saturation.value;
     colourChoice(colours[0].hsl);
 })
 hue.addEventListener('input', e => { //should be lightness not hue!! go through and correct in all relevant places
-    console.log(hue.value);
+    // console.log(hue.value);
     colours[0].hsl[2] = 100 - hue.value;
     colourChoice(colours[0].hsl);
 })
@@ -83,19 +82,17 @@ colourWheel.addEventListener('click',e => { //slightly redundant can combine wit
 })
 
 /* calculates hue from coords of mouseclick */
-function circle(cursorX,cursorY) { //Should split this in to mulptiple functions too much happening in here 
-    let colourWheelY = colourWheel.offsetTop + colourWheel.parentElement.offsetTop;  //get variables related to circle
-    let colourWheelX = colourWheel.offsetLeft + colourWheel.parentElement.offsetLeft;
+function circle(cursorX,cursorY) { //Should split this in to mulptiple functions too much happening in here and tidy up could condense this code a bit
+    let colourWheelY = colourWheel.offsetTop + colourWheel.parentElement.offsetTop;  //get y coord(*-1) for the topmost point of circle
+    let colourWheelX = colourWheel.offsetLeft + colourWheel.parentElement.offsetLeft; //get x coord for leftmost point of circle
     let colourWheelHeight = colourWheel.offsetHeight;
     // console.log(colourWheelX,colourWheelY)
     let colourWheelRadius = colourWheelHeight/2;
     let adjustedY = cursorY*-1; //change y coordinate to be negative axis
     let adjustedX = cursorX;    //could just use cursorX?
-
-    /* SHOULD SET BOTH MIDPOINTS TO BE WORKED OUT INCLUDING COLOURWHEELX AND Y SO IT STILL WORKS WHEN CIRCLE NOT AT 0,0 */  
     let midpointY = -1*(colourWheelRadius + colourWheelY); //change y coord to be negative axis
     let midpointX = colourWheelX + colourWheelRadius;
-    console.log(midpointX,midpointY,colourWheelX,colourWheelY);
+    // console.log(midpointX,midpointY,colourWheelX,colourWheelY);
     /* gradient = m and yintersect = c where y=mx+c */
     let gradient = (adjustedY-midpointY)/(adjustedX-midpointX);
     let yIntersect = midpointY - gradient*midpointX;
@@ -142,7 +139,7 @@ function circle(cursorX,cursorY) { //Should split this in to mulptiple functions
     let hypotenus = (circX - midpointX)**2 + (circY - midpointY)**2;
     let opposite = (circStartX - circX)**2 + (circStartY - circY)**2;
     colours[0].hsl[0] = Math.round(Math.asin(opposite/hypotenus) * (180/Math.PI)) + angleAdjust; //having to add to result to get correct colour? something wrong somehwere!
-    console.log(colours[0].hsl);
+    // console.log(colours[0].hsl);
     colourChoice(colours[0].hsl);
 }
 
@@ -153,18 +150,17 @@ function colourChoice(hsl) {
     hueBackground.style.background = "linear-gradient(hsl("+hsl[0]+","+hsl[1]+"%,70%),hsl("+hsl[0]+","+hsl[1]+"%,30%))";
 }
 
-let selector = 1;
+/* Moves from landing page to scheme page */
 useSelectedColour.addEventListener("click", e => {
     e.target.parentElement.classList.toggle("hidden");
-    selector = 0;
-    randomScheme(selector);
-    selector = 1;
+    colours[0].locked = true;
+    randomScheme();
+    colours[0].locked = false;
 })
 useRandomColour.addEventListener("click", e => {
     e.target.parentElement.classList.toggle("hidden");
-    selector = 1;
-    randomScheme(selector);
-    console.log("backhere")
+    randomScheme();
+    // console.log("backhere")
 })
 
 monochromaticButton.addEventListener("click",monochromatic);
@@ -173,14 +169,14 @@ quadSchemeButton.addEventListener("click",quadScheme);
 splitComplementaryButton.addEventListener("click",splitComplementary);
 
 /* selects a random scheme from the four available */
-function randomScheme(selector) {
-    containers[0].parentElement.parentElement.classList.toggle("hidden");
+function randomScheme() {
+    if (containers[0].parentElement.parentElement.classList.contains("hidden")) containers[0].parentElement.parentElement.classList.toggle("hidden");
     let schemeChoice = Math.floor(Math.random()*4);
     // let schemeChoice = 1; //for testing
-    if (schemeChoice == 1) monochromatic(selector);
-    else if (schemeChoice == 2) analogous(selector);
-    else if (schemeChoice == 3) quadScheme(selector);
-    else splitComplementary(selector);
+    if (schemeChoice == 1) monochromatic();
+    else if (schemeChoice == 2) analogous();
+    else if (schemeChoice == 3) quadScheme();
+    else splitComplementary();
 }
 
 /* function to convert hsl to rgb */
@@ -254,13 +250,13 @@ function findRelativeLum(rgb) {
         sum = (sum + curr*convertConstants[index])*(decimalPlaces);
         return (Math.round(sum))/(decimalPlaces);
     },0);
-    console.log(Math.round(luminance))/(decimalPlaces);
+    // console.log(Math.round(luminance))/(decimalPlaces);
     return luminance;
 }
 
 /* Colour scheme generators */
 function monochromatic() { //only changes lightness when generating lightness in random or splashscreen it's capped so this function should never output lightness>100 for any colours
-    if (selector === 1) randomColor();
+    if (!colours[0].locked) randomColor();
     spliceColours();
     colours[1].hsl[2] += 8;
     colours[2].hsl[2] += 16;
@@ -268,7 +264,7 @@ function monochromatic() { //only changes lightness when generating lightness in
     output();
 }
 function analogous() {
-    if (selector == 1) randomColor();
+    if (!colours[0].locked) randomColor();
     spliceColours();
     colours[1].hsl[0] += 25;
     colours[2].hsl[0] += 50;
@@ -286,7 +282,7 @@ function analogous() {
     output();
 }
 function quadScheme() {
-    if (selector == 1) randomColor();
+    if (!colours[0].locked) randomColor();
     spliceColours();
     colours[1].hsl[0] += 90;
     colours[2].hsl[0] += 180;
@@ -304,7 +300,7 @@ function quadScheme() {
     output();
 }
 function splitComplementary() {
-    if (selector == 1) randomColor();
+    if (!colours[0].locked) randomColor();
     spliceColours();
     colours[1].hsl[0] += 180;
     colours[2].hsl[0] += 30;
@@ -329,7 +325,7 @@ function splitComplementary() {
 /* sets background colour based on colours and outputs the colour code in hsl to innertext */
 function output() {
     colours.forEach((colour, index) => {
-        console.log(colour.hsl);
+        // console.log(colour.hsl);
         containers[index].style.backgroundColor = "hsl("+colour.hsl[0]+", "+colour.hsl[1]+"%, "+colour.hsl[2]+"%)" ;
         if (outputType == 1) {
             containers[index].children[0].innerText = "RGB: "+colour.rgb;
@@ -375,32 +371,39 @@ function colourDropdown() {
     colourDropdownButton.classList.toggle("hidden");
 }
 
-const hslButton = document.getElementById("hslbutton");
-const rgbButton = document.getElementById("rgbbutton");
-const hexButton = document.getElementById("hexbutton");
-const contrastButton = document.getElementById("contrastbutton");
+/* controls drop down buttons */
+[...dropContent].forEach((content,i) => {
+    content.addEventListener("click",e => {
+        outputType = i;
+        colourDropdownButton.innerText = content.innerText;
+        output();
+        colourDropdown();
+    })
+});
 
-hslButton.addEventListener('click',e => {
-    outputType = 0;
-    colourDropdownButton.innerText = "HSL";
-    output();
-    colourDropdown();
+/* Controls lock buttons toggles colour.locked on click */
+[...lockColours].forEach((e,i) => {
+   e.addEventListener("click", e => {
+        colours[i].locked = !colours[i].locked;  //toggles between true and false
+    })
 });
-rgbButton.addEventListener('click',e => {
-    outputType = 1;
-    colourDropdownButton.innerText = "RGB";
-    output();
-    colourDropdown();
-});
-hexButton.addEventListener('click',e => {
-    outputType = 2;
-    colourDropdownButton.innerText = "HEX";
-    output();
-    colourDropdown();
-});
-contrastButton.addEventListener('click',e => {
-    outputType = 3;
-    colourDropdownButton.innerText = "Contrast";
-    output();
-    colourDropdown();
-});
+
+
+document.body.onkeyup = function(e) {
+    if (e.key == " " ||
+        e.code == "Space" ||      
+        e.keyCode == 32      
+    ) {
+        // console.log(useRandomColour.parentElement.classList);
+        if (useRandomColour.parentElement.classList.contains("hidden")) randomScheme();
+        else {
+            useRandomColour.parentElement.classList.toggle("hidden");
+            randomScheme();
+        }
+    }
+  }
+
+// setInterval(console.log(colours[0].locked),800);
+setInterval(() => {
+    console.log(colours[0].locked);
+}, 800);
