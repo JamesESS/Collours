@@ -349,9 +349,9 @@ function output() {
 /* generates random hue saturation and lightness then saves to colours[0].hsl */
 function randomColor() {
     // console.log("random"+colours[0].hsl[0]);
-    colours[0].hsl[0] = Math.round(Math.random()*360);
-    colours[0].hsl[1] = Math.round((Math.random()+0.3)*100);
-    colours[0].hsl[2] = Math.round((Math.random()+0.3)*70);
+    colours[0].hsl[0] = Math.round(Math.random()*360); //should ideally change all to Math.floor instead of round for better consistency
+    colours[0].hsl[1] = Math.round(Math.random()*(100-30 +1)+30); //to get correct max min *(max-min+1) + min
+    colours[0].hsl[2] = Math.round(Math.random()*(70-30 +1)+30);
     // console.log("random"+colours[0].hsl[0]);
 }
 
